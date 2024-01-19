@@ -26,3 +26,14 @@ app.listen(3300, () => {
 // this will concatenate with the path name from the methods in userRouter file
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+
+// middleware for handling api errors
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal server error.";
+  return res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
+});
